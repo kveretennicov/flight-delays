@@ -1,0 +1,11 @@
+.btn-group[data-toggle="buttons"] label:not(.active) {
+  cursor: pointer;
+}
+
+.reset button {
+  cursor: pointer;
+}
+
+#rhs-filters .dc-chart {
+  width: 100%;
+}

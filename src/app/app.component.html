@@ -1,0 +1,114 @@
+<nav class="navbar navbar-dark bg-dark">
+  <span class="navbar-brand">Flight Delays <span *ngIf="!isReady" class="text-warning">is loading...</span></span>
+
+</nav>
+<div class="container-fluid pt-3">
+  <div class="row">
+
+    <div id="lhs-bar" class="col-4">
+
+      <form id="inputs" class="row">
+        <div class="col">
+          <div class="form-group" [style.visibility]="origins ? 'unset' : 'hidden'">
+            <label for="origin-picker">Origin</label>
+            <select id="origin-picker" name="origin" class="form-control" [(ngModel)]="selectedOrigin">
+              <option *ngFor="let o of origins" [value]="o">{{ o }}</option>
+            </select>
+          </div>
+          <div class="form-group" [style.visibility]="destinations ? 'unset' : 'hidden'">
+            <label for="destination-picker">Destination</label>
+            <select id="destination-picker" name="destination" class="form-control" [(ngModel)]="selectedDestination">
+              <option *ngFor="let d of destinations" [value]="d">{{ d }}</option>
+            </select>
+          </div>
+          <div id="delay-calc-mode-switch" class="btn-group form-group" data-toggle="buttons" [style.visibility]="isReady ? 'unset' : 'hidden'">
+            <label class="btn btn-sm" [class.active]="delayCalcMode === 'absolute'" [class.btn-primary]="delayCalcMode === 'absolute'" [class.btn-secondary]="delayCalcMode !== 'absolute'">
+              <input type="radio" autocomplete="off" [checked]="delayCalcMode === 'absolute'" (click)="delayCalcMode = 'absolute'">Delay
+            </label>
+            <label class="btn btn-sm" [class.active]="delayCalcMode === 'ratio'" [class.btn-primary]="delayCalcMode === 'ratio'" [class.btn-secondary]="delayCalcMode !== 'ratio'">
+              <input type="radio" autocomplete="off" [checked]="delayCalcMode === 'ratio'" (click)="delayCalcMode = 'ratio'">Delay Ratio
+            </label>
+          </div>
+        </div>
+      </form>
+
+      <div id="results" class="row" [style.visibility]="isReady ? 'unset' : 'hidden'">
+        <div class="col">
+          <div class="row pt-5">
+            <div class="col">
+              <table id="selection-stats" class="table table-sm">
+                <tbody>
+                  <tr>
+                    <th scope="row">
+                      Current selection
+                    </th>
+                    <td>
+                      <span #dataCountsForSelection></span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row" [ngSwitch]="delayCalcMode">
+                      <span *ngSwitchCase="'absolute'">Mean delay, minutes</span>
+                      <span *ngSwitchCase="'ratio'">Mean delay ratio</span>
+                    </th>
+                    <td>
+                      <span #meanDelayForSelection></span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="alert alert-info">
+                <h5>Best flights</h5>
+                <hr>
+                <table #flightsWithLeastDelay id="best-flights" class="table table-sm"></table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div id="rhs-filters" class="col-8">
+      <div [style.display]="isReady ? 'unset' : 'none'">
+        <div class="row">
+          <div class="col">
+            <div #timeRangePicker>
+              <div class="reset" style="visibility: hidden">
+                <span>Current filter: <span class="filter"></span></span>
+                <button class="btn btn-secondary btn-sm"
+                  (click)="resetTimeRangeFilter()">reset</button>
+              </div>
+            </div>
+            <div #delaysByDayOfMonth>
+              <div class="reset" style="visibility: hidden">
+                <span>Current filter: <span class="filter"></span></span>
+                <button class="btn btn-secondary btn-sm"
+                  (click)="resetDelaysByDayOfMonthFilter()">reset</button>
+              </div>
+            </div>
+            <div #delaysByDayOfWeek>
+              <div class="reset" style="visibility: hidden">
+                <span>Current filter: <span class="filter"></span></span>
+                <button class="btn btn-secondary btn-sm"
+                  (click)="resetDelaysByDayOfWeekFilter()">reset</button>
+              </div>
+            </div>
+            <div #delaysByHourOfDay>
+              <div class="reset" style="visibility: hidden">
+                <span>Current filter: <span class="filter"></span></span>
+                <button class="btn btn-secondary btn-sm"
+                  (click)="resetDelaysByHourOfDayFilter()">reset</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
